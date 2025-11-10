@@ -1,3 +1,4 @@
+import mysql from "mysql2/promise";
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { users, services, projects, teamMembers, contactMessages, testimonials, gallery, newsletter, resources, donations, events, eventRegistrations, InsertContactMessage, InsertTestimonial, InsertService, InsertProject, InsertTeamMember, InsertGalleryImage, InsertNewsletterSubscriber, InsertResource, InsertDonation, InsertEvent, InsertEventRegistration } from "../drizzle/schema";
