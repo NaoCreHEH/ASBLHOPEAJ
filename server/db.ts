@@ -6,32 +6,33 @@ import { ENV } from './_core/env';
 let _db: ReturnType<typeof drizzle> | null = null;
 
 export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {
-    try {
-      //_db = drizzle(process.env.DATABASE_URL);
-        // Parse DATABASE_URL to extract connection parameters
-      const url = new URL(process.env.DATABASE_URL);
-      
-      // Create connection with SSL support for TiDB
-      const connection = await mysql.createConnection({
-        host: url.hostname,
-        port: parseInt(url.port) || 4000,
-        user: url.username,
-        password: url.password,
-        database: url.pathname.substring(1), // Remove leading '/'
+   if (_db) return _db;
+  
+      const host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';
+      const user = '4CFZ3EFkSeaS5y8.root;
+      const password = '34wOLlql3l6pl3b4';
+      const database = 'HOPE';
+
+      const pool = await mysql.createPool({
+        host,
+        port: 4000,                // TiDB Serverless
+        user,
+        password,
+        database,
         ssl: {
           minVersion: "TLSv1.2",
           rejectUnauthorized: true,
+          servername: host,        // important pour SNI
         },
+        waitForConnections: true,
+        connectionLimit: 10,
       });
-      
-      _db = drizzle(connection);
-      console.log("[Database] Connected successfully with SSL");
-    } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
-      _db = null;
-    }
-  }
+
+      // optionnel : vérif immédiate
+      await pool.query("SELECT 1");
+
+      _db = drizzle(pool);
+      console.log("[Database] Connected (TLS)");
   return _db;
 }
 
