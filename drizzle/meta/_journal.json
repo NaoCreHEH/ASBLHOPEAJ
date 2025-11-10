@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1762085863575,
+      "tag": "0000_easy_tag",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1762085915999,
+      "tag": "0001_thin_mesmero",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1762322743526,
+      "tag": "0002_wet_post",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1762495361613,
+      "tag": "0003_friendly_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1762587379780,
+      "tag": "0004_milky_rictor",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1762588056657,
+      "tag": "0005_lonely_dark_beast",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1762751275446,
+      "tag": "0006_sudden_bloodaxe",
+      "breakpoints": true
+    }
+  ]
+}
