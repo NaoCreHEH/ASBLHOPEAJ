@@ -4,6 +4,7 @@ import { users, services, projects, teamMembers, contactMessages, testimonials, 
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
+console.log("[DB.ts] Loaded version with SSL + SNI");
 
 export async function getDb() {
    if (_db) return _db;
@@ -27,12 +28,17 @@ export async function getDb() {
         waitForConnections: true,
         connectionLimit: 10,
       });
+  try {
+    // ping + vérifie que c'est bien chiffré
+    const [rows] = await pool.query("SELECT @@ssl_cipher AS cipher, @@version_comment AS vc;");
+    console.log("[DB] Ping OK:", rows);
+  } catch (e: any) {
+    console.error("[DB] Ping FAILED:", e?.code, e?.errno, e?.sqlMessage || e?.message);
+    throw e; // laisse le serveur échouer pour voir l'erreur exacte dans les logs
+  }
 
-      // optionnel : vérif immédiate
-      await pool.query("SELECT 1");
-
-      _db = drizzle(pool);
-      console.log("[Database] Connected (TLS)");
+  _db = drizzle(pool);
+  console.log("[DB] Drizzle ready (TLS)");
   return _db;
 }
 
