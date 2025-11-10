@@ -5,14 +5,15 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+
 import { HelmetProvider } from "react-helmet-async";
+import Login from "./pages/Login";
 import Mission from "./pages/Mission";
 import Services from "./pages/Services";
 import Projets from "./pages/Projets";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import AdminLogin from "./pages/admin/AdminLogin";
+
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminServices from "./pages/admin/AdminServices";
 import AdminProjects from "./pages/admin/AdminProjects";
@@ -46,7 +47,7 @@ function Router() {
       <Route path={"/faire-un-don"} component={Donate} />
       <Route path={"/don-reussi"} component={DonateSuccess} />
       <Route path={"/evenements"} component={Events} />
-      <Route path={"/admin/login"} component={AdminLogin} />
+
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/admin/services"} component={AdminServices} />
       <Route path={"/admin/projets"} component={AdminProjects} />

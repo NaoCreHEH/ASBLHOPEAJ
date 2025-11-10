@@ -10,14 +10,18 @@ console.log("[DB.ts] Loaded version with SSL + SNI");
 export async function getDb() {
    if (_db) return _db;
   
-      const host = 'gateway01.eu-central-1.prod.aws.tidbcloud.com';
-      const user = '4CFZ3EFkSeaS5y8.root';
-      const password = '34wOLlql3l6pl3b4';
-      const database = 'HOPE';
+      if (!ENV.databaseUrl) {
+        throw new Error("DATABASE_URL environment variable is not set.");
+      }
+      const url = new URL(ENV.databaseUrl);
+      const host = url.hostname;
+      const user = url.username;
+      const password = url.password;
+      const database = url.pathname.substring(1);
 
       const pool = await mysql.createPool({
         host,
-        port: 4000,                // TiDB Serverless
+        port: parseInt(url.port || "4000", 10), // TiDB Serverless or default
         user,
         password,
         database,
@@ -42,6 +46,7 @@ export async function getDb() {
   console.log("[DB] Drizzle ready (TLS)");
   return _db;
 }
+// Users
 
 export async function getUserByEmail(email: string) {
   const db = await getDb();

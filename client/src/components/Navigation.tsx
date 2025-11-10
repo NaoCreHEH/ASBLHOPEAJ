@@ -82,7 +82,7 @@ export default function Navigation() {
                   </span>
                 </Link>
               ))}
-              {isAdmin && (
+                {isAdmin ? (
                 <Link href="/admin">
                   <Button
                     variant="outline"
@@ -91,6 +91,16 @@ export default function Navigation() {
                   >
                     <Shield size={16} className="mr-2" />
                     Admin
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <Button
+                    variant="outline"
+                    className="bg-transparent border-white text-white hover:bg-white hover:text-hope-purple w-full"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Se connecter
                   </Button>
                 </Link>
               )}
