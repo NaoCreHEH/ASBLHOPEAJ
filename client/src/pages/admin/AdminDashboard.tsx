@@ -25,7 +25,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "admin")) {
-      setLocation("/admin/login");
+      setLocation("/login");
     }
   }, [user, loading, setLocation]);
 
