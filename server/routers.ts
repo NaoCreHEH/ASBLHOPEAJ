@@ -7,13 +7,7 @@ import { z } from "zod";
 import * as db from "./db";
 import { uploadImage } from "./imageUpload";
 
-// Admin-only procedure
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== 'admin') {
-    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' });
-  }
-  return next({ ctx });
-});
+
 
 export const appRouter = router({
   system: systemRouter,
