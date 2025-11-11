@@ -46,6 +46,10 @@ const trpcClient = trpc.createClient({
         return globalThis.fetch(input, {
           ...(init ?? {}),
           credentials: "include",
+          headers: {
+            ...init?.headers,
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
         });
       },
     }),

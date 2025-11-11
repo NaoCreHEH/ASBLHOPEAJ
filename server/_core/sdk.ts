@@ -4,6 +4,7 @@ import axios, { type AxiosInstance } from "axios";
 import { parse as parseCookieHeader } from "cookie";
 import type { Request } from "express";
 import { SignJWT, jwtVerify } from "jose";
+import { verifyToken } from "../jwt";
 import type { User } from "../../drizzle/schema";
 import * as db from "../db";
 import { ENV } from "./env";
@@ -257,13 +258,34 @@ class SDKServer {
   }
 
   async authenticateRequest(req: Request): Promise<User> {
-    // Regular authentication flow
+    // 1. Try to authenticate using JWT from Authorization header (local login)
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.slice(7)
+      : null;
+
+    if (token) {
+      try {
+        const payload = verifyToken(token);
+        if (payload) {
+          const user = await db.getUserById(payload.userId);
+          if (user) {
+            return user;
+          }
+        }
+      } catch (error) {
+        console.warn("[Auth] JWT verification failed:", error);
+        // Continue to next authentication method
+      }
+    }
+
+    // 2. Fallback to regular authentication flow (OAuth/Cookie)
     const cookies = this.parseCookies(req.headers.cookie);
     const sessionCookie = cookies.get(COOKIE_NAME);
     const session = await this.verifySession(sessionCookie);
 
     if (!session) {
-      throw ForbiddenError("Invalid session cookie");
+      throw ForbiddenError("Invalid session cookie or missing JWT");
     }
 
     const sessionUserId = session.openId;
